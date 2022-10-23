@@ -20,26 +20,26 @@ const Cv = () => {
   const [load, setLoad] = React.useState<boolean>(false);
   const ref = React.useRef(null);
 
-  const handleClick2 = async () => {
-    try {
-      const response = await fetch(`/api/print`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/html' },
-        body: new XMLSerializer().serializeToString(document),
-      });
-      const file = await response.blob();
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(file);
-      link.download = 'CV-Jonathan-Vacherat_Lead-Software-Engineer.pdf';
-      document.body.append(link);
-      link.click();
-      link.remove();
-      // in case the Blob uses a lot of memory
-      setTimeout(() => URL.revokeObjectURL(link.href), 7000);
-    } catch (err: any) {
-      console.log(err.message);
-    }
-  };
+  // const handleClick2 = async () => {
+  //   try {
+  //     const response = await fetch(`/api/print`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'text/html' },
+  //       body: new XMLSerializer().serializeToString(document),
+  //     });
+  //     const file = await response.blob();
+  //     const link = document.createElement('a');
+  //     link.href = URL.createObjectURL(file);
+  //     link.download = 'CV-Jonathan-Vacherat_Lead-Software-Engineer.pdf';
+  //     document.body.append(link);
+  //     link.click();
+  //     link.remove();
+  //     // in case the Blob uses a lot of memory
+  //     setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  //   } catch (err: any) {
+  //     console.log(err.message);
+  //   }
+  // };
 
   const handleClick = async () => {
     try {

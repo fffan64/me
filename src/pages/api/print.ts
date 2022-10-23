@@ -1,22 +1,38 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
+import edgeChromium from 'chrome-aws-lambda';
 import { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from 'puppeteer';
+import puppeteerDev from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 
-const generatePDF = async (html = '') => {
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-  await page.setContent(html, { waitUntil: 'networkidle0' })
-  const pdfBuffer = await page.pdf({ format: 'a4' })
+// const generatePDF = async (html = '') => {
+//   const browser = await puppeteer.launch()
+//   const page = await browser.newPage()
+//   await page.setContent(html, { waitUntil: 'networkidle0' })
+//   const pdfBuffer = await page.pdf({ format: 'a4' })
 
-  await page.close()
-  await browser.close()
+//   await page.close()
+//   await browser.close()
 
-  return pdfBuffer
-};
+//   return pdfBuffer
+// };
 
 const generatePDFFromUrl = async (url = '') => {
-  const browser = await puppeteer.launch()
+
+  // Edge executable will return an empty string locally.
+  const executablePath = await edgeChromium.executablePath;
+
+  let browser;
+  if (!executablePath) {
+    browser = await puppeteerDev.launch();
+  } else {
+    browser = await puppeteer.launch({
+      executablePath,
+      args: edgeChromium.args,
+      headless: false,
+    })
+  }
+
   const page = await browser.newPage()
   await page.goto(url, { waitUntil: 'networkidle0' })
   const pdfBuffer = await page.pdf({ format: 'a4', scale: 0.52, margin: {
